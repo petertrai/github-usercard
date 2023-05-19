@@ -4,7 +4,24 @@ import axios from 'axios';
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
-axios.get(`https://api.github.com/users/petertrai`);
+const followersArray = ['tetondan', 'dustinmyers', 'justsml','luishrd', 'bigknell', 'petertrai' ];
+
+
+
+const getGitCard = (username) => {
+  axios.get(`https://api.github.com/users/${username}`)
+.then(resp => {
+  document.querySelector('.cards').appendChild(githubCard(resp.data));
+  console.log(resp);
+  
+  
+})
+}
+followersArray.forEach(follower => {
+  getGitCard(follower)
+})
+
+
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -29,7 +46,55 @@ axios.get(`https://api.github.com/users/petertrai`);
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+
+
+
+ 
+
+const githubCard = (respdata) => {
+  const card = document.createElement('div');
+  const img = document.createElement('img');
+  const cardInfo = document.createElement('div');
+  const name = document.createElement('h3');
+  const login = document.createElement('p');
+  const location = document.createElement('p');
+  const profile = document.createElement('p');
+  const profileLink = document.createElement('a');
+  const followers = document.createElement('p');
+  const following = document.createElement('p');
+  const bio = document.createElement('p')
+
+  img.src = respdata.avatar_url;
+  img.alt = 'github user';
+  name.textContent = respdata.name;
+  login.textContent = respdata.login;
+  location.textContent = respdata.location;
+  profile.textContent = 'Profile';
+  profileLink.textContent = 'Link to profile';
+  profileLink.href = respdata.html_url;
+  followers.textContent = `followers: ${respdata.followers}`;
+  following.textContent = `following: ${respdata.following}`;
+  bio.textContent = respdata.bio;
+
+  card.appendChild(img);
+  card.appendChild(cardInfo);
+  cardInfo.appendChild(name);
+  cardInfo.appendChild(login);
+  cardInfo.appendChild(location);
+  cardInfo.appendChild(profile);
+  profile.appendChild(profileLink);
+  cardInfo.appendChild(followers);
+  cardInfo.appendChild(following);
+  cardInfo.appendChild(bio)
+
+  card.classList.add('card')
+  cardInfo.classList.add('card-info');
+  name.classList.add('name');
+  login.classList.add('username');
+
+
+  return card;
+}
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
